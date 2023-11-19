@@ -1,17 +1,17 @@
-CREATE TABLE videos (
+CREATE TABLE IF NOT EXISTS videos (
   id TEXT PRIMARY KEY NOT NULL,
   video_type TEXT NOT NULL,
   video_title TEXT NOT NULL,
   channel_id TEXT NOT NULL,
   FOREIGN KEY(channel_id) REFERENCES channels(id)
 );
-CREATE TABLE channels (
+CREATE TABLE IF NOT EXISTS channels (
   id TEXT PRIMARY KEY NOT NULL,
   channel_name TEXT NOT NULL UNIQUE,
   channel_url TEXT NOT NULL UNIQUE,
   is_subbed BOOLEAN NOT NULL
 );
-CREATE TABLE watch_history (
+CREATE TABLE IF NOT EXISTS ccc (
   id INTEGER PRIMARY KEY,
   video_id TEXT,
   watched_at TEXT NOT NULL,
