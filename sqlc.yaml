@@ -1,0 +1,16 @@
+version: "2"
+
+sql:
+ - engine: "sqlite"
+   queries: "db/query"
+   schema: "db/migrations"
+   database:
+     uri: "sqlite3://youtube.db"
+   gen:
+      go:
+         package: "db"
+         out: "db/sqlc"
+         emit_json_tags: false
+         emit_prepared_queries: false
+         emit_interface: false
+         emit_exact_table_names: false
