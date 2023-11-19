@@ -1,3 +1,0 @@
-DROP TABLE IF Exist videos;
-DROP TABLE IF Exist channels;
-DROP TABLE IF Exist watch_history; 
