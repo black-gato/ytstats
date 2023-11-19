@@ -1,0 +1,47 @@
+
+
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table videos {
+  id varchar [not null, primary key]
+  video_type varchar [not null]
+  video_title varchar [not null]
+  channel_id varchar  [not null]
+  
+  Indexes{
+  video_type
+  
+}
+  
+}
+
+
+Table channels {
+
+  id varchar [not null, primary key]
+  channel_name varchar [not null,unique]
+  channel_url varchar [not null, unique]
+  is_subbed bool [not null]
+  Indexes{
+    is_subbed
+
+}
+}
+
+
+
+
+Table watch_history {
+  id bigint [primary key]
+  video_id varchar 
+  watched_at timestamp [not null]
+
+    Indexes{
+  video_id
+}
+}
+
+Ref: videos.channel_id > channels.id 
+Ref: watch_history.video_id > videos.id
+
