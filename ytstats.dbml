@@ -20,7 +20,7 @@ Table videos {
 Table channels {
 
   id varchar [not null, primary key]
-  channel_name varchar [not null,unique]
+  channel_name varchar [not null]
   channel_url varchar [not null, unique]
   is_subbed bool [not null]
   Indexes{

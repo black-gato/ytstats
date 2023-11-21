@@ -8,3 +8,11 @@ tasks:
   migratedown:
     cmds: 
       - migrate -path db/migrations -database "sqlite3://youtube.db" -verbose down
+  
+  dropdb:
+    cmds:
+      - rm -rf youtube.db
+  
+  createdb:
+    cmds:
+      - touch youtube.db
