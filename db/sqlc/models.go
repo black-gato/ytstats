@@ -26,4 +26,5 @@ type WatchHistory struct {
 	ID        int64
 	VideoID   sql.NullString
 	WatchedAt string
+	ChannelID sql.NullString
 }

@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS watch_history (
   video_id TEXT,
   watched_at TEXT NOT NULL,
   channel_id TEXT,
-  FOREIGN KEY (channel_id) REFERENCES channels(id)
+  FOREIGN KEY(channel_id) REFERENCES channels(id),
   FOREIGN KEY(video_id) REFERENCES videos(id)
 );
 CREATE INDEX _25be8e9c140a414d88cae1490ca9cc77 ON videos (video_type);
