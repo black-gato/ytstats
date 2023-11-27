@@ -1,6 +1,12 @@
 version: '3'
 # migrate -path db/migration -database "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable -verbose up"
-tasks: 
+tasks:
+  dropdb:
+    cmds:
+      - rm -rf youtube.db
+  createdb:
+    cmds:
+      - touch youtube.db
   migrateup:
     cmds: 
       - migrate -path db/migrations -database "sqlite3://youtube.db" -verbose up
