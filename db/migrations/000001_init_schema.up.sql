@@ -7,14 +7,16 @@ CREATE TABLE IF NOT EXISTS videos (
 );
 CREATE TABLE IF NOT EXISTS channels (
   id TEXT PRIMARY KEY NOT NULL,
-  channel_name TEXT NOT NULL UNIQUE,
+  channel_name TEXT NOT NULL,
   channel_url TEXT NOT NULL UNIQUE,
   is_subbed BOOLEAN NOT NULL
 );
-CREATE TABLE IF NOT EXISTS ccc (
+CREATE TABLE IF NOT EXISTS watch_history (
   id INTEGER PRIMARY KEY,
   video_id TEXT,
   watched_at TEXT NOT NULL,
+  channel_id TEXT,
+  FOREIGN KEY(channel_id) REFERENCES channels(id),
   FOREIGN KEY(video_id) REFERENCES videos(id)
 );
 CREATE INDEX _25be8e9c140a414d88cae1490ca9cc77 ON videos (video_type);
