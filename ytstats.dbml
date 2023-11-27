@@ -7,7 +7,7 @@ Table videos {
   id varchar [not null, primary key]
   video_type varchar [not null]
   video_title varchar [not null]
-  channel_id varchar  [not null]
+  channel_id varchar 
   
   Indexes{
   video_type
@@ -20,7 +20,7 @@ Table videos {
 Table channels {
 
   id varchar [not null, primary key]
-  channel_name varchar [not null,unique]
+  channel_name varchar [not null]
   channel_url varchar [not null, unique]
   is_subbed bool [not null]
   Indexes{
@@ -36,12 +36,13 @@ Table watch_history {
   id bigint [primary key]
   video_id varchar 
   watched_at timestamp [not null]
+  channel_id varchar
 
     Indexes{
   video_id
 }
 }
 
+Ref: watch_history.channel_id > channels.id
 Ref: videos.channel_id > channels.id 
 Ref: watch_history.video_id > videos.id
-
