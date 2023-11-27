@@ -66,7 +66,7 @@ func init() {
 
 func Setup() {
 
-	f, err := os.Open("C:/Users/Anthony/Downloads/anthonys-data/Takeout/YouTube and YouTube Music/subscriptions/subscriptions.csv")
+	f, err := os.Open("subscriptions.csv")
 
 	if err != nil {
 		log.Fatalf("Can't open file %s", err.Error())
@@ -111,7 +111,7 @@ func Setup() {
 
 	}
 
-	j, err := os.Open("C:/Users/Anthony/Downloads/anthonys-data/Takeout/YouTube and YouTube Music/history/watch-history.json")
+	j, err := os.Open("watch-history.json")
 	if err != nil {
 		log.Fatalf("couldn't read file %s", err.Error())
 	}
@@ -138,12 +138,18 @@ func Setup() {
 		}
 
 		if y.Subtitles != nil {
-			vId := strings.Split(y.TitleURL, "watch?")
+			vId := strings.Split(y.TitleURL, "watch?v\u003d")
+			fmt.Println(vId[1])
 			title := strings.Split(y.Title, "Watched ")
 
 			cId := strings.SplitAfterN(y.Subtitles[0].URL, "/", 5)
 
-			fmt.Printf("ID: %s VideoType: %s VideoTitle: %s ChannelID: %s \n ", vId[1], y.Header, title[1], cId[4])
+			_, err = db.AddWatchHistory(context.Background(), m.AddWatchHistoryParams{VideoID: vId[1], WatchedAt: y.Time.String()})
+
+			if err != nil {
+				fmt.Printf("hello %v \n", err)
+				continue
+			}
 
 			_, err = db.AddVideo(context.Background(), m.AddVideoParams{ID: vId[1], VideoType: y.Header, VideoTitle: title[1], ChannelID: cId[4]})
 

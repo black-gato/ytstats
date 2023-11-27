@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS channels (
   is_subbed BOOLEAN NOT NULL
 );
 CREATE TABLE IF NOT EXISTS watch_history (
-  id INTEGER PRIMARY KEY,
-  video_id TEXT,
+  watch_history_id INTEGER PRIMARY KEY,
+  video_id TEXT NOT NULL,
   watched_at TEXT NOT NULL, 
   FOREIGN KEY(video_id) REFERENCES videos(id)
 );

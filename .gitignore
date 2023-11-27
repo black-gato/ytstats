@@ -20,3 +20,10 @@ vendor/
 
 # Go workspace file
 go.work
+
+anthonys-data
+
+watch-history.json
+
+subscriptions.csv
+
