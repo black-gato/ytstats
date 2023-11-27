@@ -20,3 +20,8 @@ vendor/
 
 # Go workspace file
 go.work
+
+youtube.db-*
+
+subscriptions.csv
+watch-history.json
