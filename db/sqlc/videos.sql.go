@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 )
 
 const addVideo = `-- name: AddVideo :one
@@ -24,7 +25,7 @@ type AddVideoParams struct {
 	ID         string
 	VideoType  string
 	VideoTitle string
-	ChannelID  string
+	ChannelID  sql.NullString
 }
 
 func (q *Queries) AddVideo(ctx context.Context, arg AddVideoParams) (Video, error) {

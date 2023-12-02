@@ -12,14 +12,14 @@ type Channel struct {
 	ID          string
 	ChannelName string
 	ChannelUrl  string
-	IsSubbed    bool
+	IsSubbed    int64
 }
 
 type Video struct {
 	ID         string
 	VideoType  string
 	VideoTitle string
-	ChannelID  string
+	ChannelID  sql.NullString
 }
 
 type WatchHistory struct {

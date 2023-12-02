@@ -25,7 +25,7 @@ type AddChannelParams struct {
 	ID          string
 	ChannelName string
 	ChannelUrl  string
-	IsSubbed    bool
+	IsSubbed    int64
 }
 
 func (q *Queries) AddChannel(ctx context.Context, arg AddChannelParams) (Channel, error) {

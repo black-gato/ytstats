@@ -32,7 +32,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		Setup()
+		setup()
 
 	},
 }
@@ -65,7 +65,7 @@ func init() {
 	// initCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func Setup() {
+func setup() {
 
 	f, err := os.Open("subscriptions.csv")
 
@@ -104,7 +104,7 @@ func Setup() {
 
 	for _, row := range subscriptions {
 
-		_, err := db.AddChannel(context.Background(), m.AddChannelParams{ID: row[0], ChannelUrl: row[1], ChannelName: row[2], IsSubbed: true})
+		_, err := db.AddChannel(context.Background(), m.AddChannelParams{ID: row[0], ChannelUrl: row[1], ChannelName: row[2], IsSubbed: 1})
 
 		if err != nil {
 			continue
@@ -161,14 +161,14 @@ func Setup() {
 				continue
 			}
 
-			_, err = db.AddVideo(context.Background(), m.AddVideoParams{ID: vId[1], VideoType: y.Header, VideoTitle: title[1], ChannelID: cId[4]})
+			_, err = db.AddVideo(context.Background(), m.AddVideoParams{ID: vId[1], VideoType: y.Header, VideoTitle: title[1], ChannelID: channelNullStr})
 
 			if err != nil {
 				fmt.Println(err)
 				continue
 			}
 
-			_, err := db.AddChannel(context.Background(), m.AddChannelParams{ID: cId[4], ChannelUrl: y.Subtitles[0].URL, ChannelName: y.Subtitles[0].Name, IsSubbed: false})
+			_, err := db.AddChannel(context.Background(), m.AddChannelParams{ID: cId[4], ChannelUrl: y.Subtitles[0].URL, ChannelName: y.Subtitles[0].Name, IsSubbed: 0})
 
 			if err != nil {
 				fmt.Println(err)
