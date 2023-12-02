@@ -38,3 +38,51 @@ func (q *Queries) AddWatchHistory(ctx context.Context, arg AddWatchHistoryParams
 	)
 	return i, err
 }
+
+const getMostWatched = `-- name: GetMostWatched :many
+SELECT videos.video_title, channels.channel_name, COUNT(*) AS watch_count, channels.is_subbed, videos.video_type
+FROM watch_history
+INNER JOIN videos ON  watch_history.video_id = videos.id
+INNER JOIN channels ON watch_history.channel_id = channels.id
+WHERE channels.is_subbed = 1
+GROUP BY watch_history.video_id
+HAVING COUNT(*) > 1
+ORDER BY watch_count DESC
+`
+
+type GetMostWatchedRow struct {
+	VideoTitle  string
+	ChannelName string
+	WatchCount  int64
+	IsSubbed    int64
+	VideoType   string
+}
+
+func (q *Queries) GetMostWatched(ctx context.Context) ([]GetMostWatchedRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMostWatched)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMostWatchedRow
+	for rows.Next() {
+		var i GetMostWatchedRow
+		if err := rows.Scan(
+			&i.VideoTitle,
+			&i.ChannelName,
+			&i.WatchCount,
+			&i.IsSubbed,
+			&i.VideoType,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
