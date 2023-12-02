@@ -48,6 +48,7 @@ WHERE channels.is_subbed = 1
 GROUP BY watch_history.video_id
 HAVING COUNT(*) > 1
 ORDER BY watch_count DESC
+LIMIT 10
 `
 
 type GetMostWatchedRow struct {
