@@ -55,7 +55,7 @@ type GetMostWatchedRow struct {
 	VideoTitle  string
 	ChannelName string
 	WatchCount  int64
-	IsSubbed    int64
+	IsSubbed    bool
 	VideoType   string
 }
 

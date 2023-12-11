@@ -12,7 +12,7 @@ type Channel struct {
 	ID          string
 	ChannelName string
 	ChannelUrl  string
-	IsSubbed    int64
+	IsSubbed    bool
 }
 
 type Video struct {
