@@ -104,7 +104,7 @@ func setup() {
 
 	for _, row := range subscriptions {
 
-		_, err := db.AddChannel(context.Background(), m.AddChannelParams{ID: row[0], ChannelUrl: row[1], ChannelName: row[2], IsSubbed: 1})
+		_, err := db.AddChannel(context.Background(), m.AddChannelParams{ID: row[0], ChannelUrl: row[1], ChannelName: row[2], IsSubbed: true})
 
 		if err != nil {
 			continue
@@ -168,7 +168,7 @@ func setup() {
 				continue
 			}
 
-			_, err := db.AddChannel(context.Background(), m.AddChannelParams{ID: cId[4], ChannelUrl: y.Subtitles[0].URL, ChannelName: y.Subtitles[0].Name, IsSubbed: 0})
+			_, err := db.AddChannel(context.Background(), m.AddChannelParams{ID: cId[4], ChannelUrl: y.Subtitles[0].URL, ChannelName: y.Subtitles[0].Name, IsSubbed: false})
 
 			if err != nil {
 				fmt.Println(err)

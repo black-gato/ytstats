@@ -9,7 +9,7 @@ CREATE TABLE channels (
   id TEXT PRIMARY KEY NOT NULL,
   channel_name TEXT NOT NULL,
   channel_url TEXT NOT NULL UNIQUE,
-  is_subbed INTEGER NOT NULL
+  is_subbed BOOLEAN NOT NULL
 );
 CREATE TABLE watch_history (
   id INTEGER PRIMARY KEY,
