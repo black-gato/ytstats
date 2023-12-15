@@ -30,7 +30,7 @@ Table channels {
 Table watch_history {
   id bigint [primary key]
   video_id varchar 
-  watched_at timestamp [not null]
+  watched_at timestamp [not null, unique]
   channel_id varchar
 
     Indexes{

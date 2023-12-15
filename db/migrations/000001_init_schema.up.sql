@@ -14,7 +14,7 @@ CREATE TABLE channels (
 CREATE TABLE watch_history (
   id INTEGER PRIMARY KEY,
   video_id TEXT,
-  watched_at TEXT NOT NULL,
+  watched_at TEXT NOT NULL UNIQUE,
   channel_id TEXT,
   FOREIGN KEY(channel_id) REFERENCES channels(id),
   FOREIGN KEY(video_id) REFERENCES videos(id)

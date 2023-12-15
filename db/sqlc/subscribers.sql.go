@@ -46,15 +46,32 @@ func (q *Queries) AddChannel(ctx context.Context, arg AddChannelParams) (Channel
 }
 
 const getMostWatchedChannels = `-- name: GetMostWatchedChannels :many
-SELECT channels.channel_name, COUNT(*) AS watch_count, channels.is_subbed
-FROM watch_history
-INNER JOIN channels ON watch_history.channel_id = channels.id
-WHERE channels.is_subbed = 1
-GROUP BY watch_history.channel_id
-HAVING COUNT(*) >= 1
-ORDER BY watch_count DESC
-LIMIT ?1
+SELECT
+  channels.channel_name,
+  COUNT(*) AS watch_count,
+  channels.is_subbed
+FROM
+  watch_history
+INNER JOIN
+  channels ON watch_history.channel_id = channels.id
+WHERE
+  (channels.channel_name = ?1 OR ?1 IS NULL)
+  OR (channels.is_subbed = ?2 OR ?2 IS NULL)
+GROUP BY
+  channels.id
+HAVING
+  COUNT(*) >= 1
+ORDER BY
+  watch_count DESC
+LIMIT
+  ?3
 `
+
+type GetMostWatchedChannelsParams struct {
+	ChannelName string
+	IsSubbed    bool
+	Limit       int64
+}
 
 type GetMostWatchedChannelsRow struct {
 	ChannelName string
@@ -62,8 +79,8 @@ type GetMostWatchedChannelsRow struct {
 	IsSubbed    bool
 }
 
-func (q *Queries) GetMostWatchedChannels(ctx context.Context, limit int64) ([]GetMostWatchedChannelsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getMostWatchedChannels, limit)
+func (q *Queries) GetMostWatchedChannels(ctx context.Context, arg GetMostWatchedChannelsParams) ([]GetMostWatchedChannelsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMostWatchedChannels, arg.ChannelName, arg.IsSubbed, arg.Limit)
 	if err != nil {
 		return nil, err
 	}

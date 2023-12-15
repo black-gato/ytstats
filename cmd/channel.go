@@ -7,6 +7,8 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
+	"text/tabwriter"
 
 	c "github.com/black-gato/ytstats/db"
 	m "github.com/black-gato/ytstats/db/sqlc"
@@ -15,7 +17,6 @@ import (
 
 // channelCmd represents the channel command
 
-var mostWatched bool
 var channelCmd = &cobra.Command{
 	Use:   "channel",
 	Short: "A brief description of your command",
@@ -32,37 +33,64 @@ to quickly create a Cobra application.`,
 	// 	return nil
 	// },
 	Run: func(cmd *cobra.Command, args []string) {
+		w := tabwriter.NewWriter(os.Stdout, 0, 0, 4, ' ', 0)
 
-		mostWatched, _ := cmd.Flags().GetBool("most-watched")
+		fmt.Fprintln(w, "ChannelName\tViews\tIsSubbed")
 
-		if mostWatched {
-			con, err := c.OpenConnection()
+		limit, _ := cmd.Flags().GetInt64("limit")
+		isSubbed, _ := cmd.Flags().GetBool("isSubbed")
+		name, _ := cmd.Flags().GetString("name")
 
-			if err != nil {
-				log.Fatalf("Can't connect to db %s", err.Error())
-			}
+		con, err := c.OpenConnection()
 
-			defer con.Close()
+		if err != nil {
+			log.Fatalf("Can't connect to db %s", err.Error())
+		}
 
-			db := m.New(con)
+		defer con.Close()
 
-			tst, err := db.GetMostWatched(context.Background())
+		db := m.New(con)
+
+		if name != "" {
+			channel, err := db.GetMostWatchedChannels(context.Background(), m.GetMostWatchedChannelsParams{ChannelName: name})
 
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			fmt.Println(tst)
+			for _, ch := range channel {
+				fmt.Fprintf(w, "%s\t%d\t%t\n", ch.ChannelName, ch.WatchCount, ch.IsSubbed)
+
+			}
+
+			w.Flush()
+			return
+
+		}
+		channel, err := db.GetMostWatchedChannels(context.Background(), m.GetMostWatchedChannelsParams{Limit: limit, IsSubbed: isSubbed})
+
+		if err != nil {
+			log.Fatal(err)
 		}
 
-		fmt.Println(mostWatched)
+		for _, ch := range channel {
+			fmt.Fprintf(w, "%s\t%d\t%t\n", ch.ChannelName, ch.WatchCount, ch.IsSubbed)
+
+		}
+
+		w.Flush()
 
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(channelCmd)
-	channelCmd.PersistentFlags().Bool("most-watched", false, "most watched channel")
+	channelCmd.PersistentFlags().String("name", "", "channel name")
+	channelCmd.PersistentFlags().Bool("isSubbed", false, "subs only")
+
+	channelCmd.PersistentFlags().Int64("limit", 10, "number of entries retur")
+	channelCmd.MarkFlagsMutuallyExclusive("name", "limit")
+	channelCmd.MarkFlagsMutuallyExclusive("name", "isSubbed")
 
 	// Here you will define your flags and configuration settings.
 
